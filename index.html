@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WOTD Tweet Stream</title>
-</head>
-<body>
-    <h1>HI!</h1>
-</body>
-<script>
-
-</script>
+  </head>
+  <body>
+    <div id="feed">
+      <h1>HI!</h1>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    fetch('http://urban-word-of-the-day.herokuapp.com/').then((res) =>
+      console.log(res)
+    );
+    var socket = io.connect('http://localhost:3001');
+    socket.on('tweet', ({ tweet }) => {
+      console.log(tweet);
+      var node = document.createElement('p');
+      var textnode = document.createTextNode(`${tweet}`);
+      node.appendChild(textnode);
+      const bodyNode = document.getElementById('feed');
+      bodyNode.appendChild(node);
+      //   document.getElementById('#body').appendChild(node);
+    });
+  </script>
 </html>
