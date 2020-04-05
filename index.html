@@ -12,9 +12,9 @@
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    fetch('https://urban-word-of-the-day.herokuapp.com/').then((res) =>
-      console.log(res)
-    );
+    fetch('https://urban-word-of-the-day.herokuapp.com/', {
+      cors: 'no-cors',
+    }).then((res) => console.log(res));
     var socket = io.connect('https://agile-castle-96552.herokuapp.com/');
     socket.on('tweet', ({ tweet }) => {
       console.log(tweet);
