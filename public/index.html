@@ -51,7 +51,7 @@
     let ctx, chart;
     const languages = {};
     let data = [];
-    const socket = io.connect('http://localhost:3001');
+    const socket = io.connect('https://agile-castle-96552.herokuapp.com/');
 
     const date = moment().format('lll');
     document.getElementById('date').innerHTML = date;
@@ -82,7 +82,7 @@
 
       if (languages) {
         sorted = Object.entries(languages).sort((a, b) => b[1] - a[1]);
-        
+
         if (sorted.length >= 10) sorted.splice(10, sorted.length - 1);
 
         labels = sorted.map((item) => item[0]);
