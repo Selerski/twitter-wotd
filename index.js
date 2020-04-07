@@ -1,10 +1,7 @@
-// tw.track('socket.io');
-// tw.track('javascript');
 const express = require('express');
 const app = express();
 const http = require('http');
 const socketio = require('socket.io');
-const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const server = http.createServer(app);
@@ -13,7 +10,8 @@ const io = socketio(server);
 const Twitter = require('twitter');
 require('dotenv').config();
 
-const port = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
+
 const { API_KEY, API_SECRET_KEY, ACC_TOKEN, ACC_TOKEN_SECRET } = process.env;
 
 const t = new Twitter({
@@ -23,25 +21,27 @@ const t = new Twitter({
   access_token_secret: ACC_TOKEN_SECRET,
 });
 
-app.use(bodyParser.json());
-app.use(cors({origin: 'https://localhost:3001'}));
+app.use(cors());
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
-});
-
-io.on('connection', (socket) => {
-  t.stream('statuses/filter', { track: 'java' }, (stream) => {
-    stream.on('data', ({ text }) => {
-      socket.emit('tweet', { tweet: text });
+t.stream('statuses/filter', { track: 'coronavirus' }, (stream) => {
+  io.on('connection', (socket) => {
+    stream.on('data', (tweet) => {
+      socket.emit('tweet', { tweet: tweet.text, language: tweet.lang });
     });
-
-    stream.on('error', function (error) {
-      throw error;
+    stream.on('error', (error) => console.log('No data', error));
+    socket.on('disconnect', () => {
+      socket.removeAllListeners('tweet');
+      socket.disconnect()
+      delete socket;
     });
   });
 });
 
-server.listen(port, function () {
-  console.log('listening on *:3000');
+app.use(express.static(path.join(__dirname, '/public')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/index.html'));
+});
+
+server.listen(PORT, function () {
+  console.log(`Server listening on ${PORT}`);
 });
