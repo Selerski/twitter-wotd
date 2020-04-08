@@ -32,7 +32,6 @@ t.stream('statuses/filter', { track: 'coronavirus' }, (stream) => {
     socket.on('disconnect', () => {
       socket.removeAllListeners('tweet');
       socket.disconnect();
-
       delete socket;
     });
   });

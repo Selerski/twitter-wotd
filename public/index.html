@@ -94,6 +94,12 @@
     });
 
     setInterval(() => {
+      if (document.querySelector('.loading').style.display !== 'none') {
+        document
+          .querySelectorAll('.loading')
+          .forEach((item) => (item.style.display = 'none'));
+      }
+
       let ctx = document.getElementById('language-chart').getContext('2d');
       let chart = new Chart(ctx, {
         // The type of chart we want to create
@@ -141,12 +147,6 @@
           responsiveAnimationDuration: 0, // animation duration after a resize
         },
       });
-
-      if (document.querySelector('.loading').style.display !== 'none') {
-        document
-          .querySelectorAll('.loading')
-          .forEach((item) => (item.style.display = 'none'));
-      }
 
       const currentNumbers = document.getElementById('counter').innerHTML;
       if (data.length >= 12) data.shift();
