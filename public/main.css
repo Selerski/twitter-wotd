@@ -5,9 +5,16 @@ body {
   font-family: 'Roboto', sans-serif;
   height: 100vh;
 }
-.header {
+
+.header,
+.main-window,
+.feed,
+.feed-wrapper {
   display: flex;
   flex-direction: column;
+}
+
+.header {
   align-items: center;
   margin-bottom: 5px;
 }
@@ -18,7 +25,7 @@ div.info {
 span.date {
   width: fit-content;
 }
-span.counter {
+span.counter, div.loading {
   background-color: #03dac6;
   color: white;
   font-weight: bold;
@@ -29,21 +36,25 @@ h1.title {
   background-color: #3f51b5;
   padding: 10px;
   color: white;
-  margin: 2px auto 10px auto;
+  margin: 10px auto;
   text-align: center;
   border-radius: 4px;
   font-size: 2.5rem;
 }
-.main-window {
-  display: flex;
-  flex-direction: column;
+div.loading {
+  background-color: #ffc400;
+  width: fit-content;
+  position: relative;
+  top: 45%;
+  margin: auto auto;
 }
+
 .feed-container {
   display: flex;
   flex-direction: row;
   margin: auto;
   height: 100%;
-  width: 90%;
+  width: 95%;
 }
 
 .live-data {
@@ -52,14 +63,13 @@ h1.title {
 }
 
 .chart-wrapper {
-  width: 80%;
-  height: 300px;
+  position: relative;
   margin: 0 auto;
+  width: 500px;
+  height: 300px;
 }
 
 .feed {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow-y: scroll;
@@ -72,8 +82,6 @@ h1.title {
 
 .feed-wrapper {
   flex: 2;
-  display: flex;
-  flex-direction: column;
   justify-content: space-evenly;
   margin-top: 10px;
 }

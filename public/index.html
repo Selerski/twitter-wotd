@@ -30,11 +30,15 @@
             </span>
             tweets about Coronavirus were posted
           </div>
-          <div id="languages" class="chart-wrapper">
-            <canvas id="language-chart"></canvas>
-          </div>
-          <div id="time" class="chart-wrapper">
-            <canvas id="time-chart"></canvas>
+          <div class="chart-container">
+            <div id="languages" class="chart-wrapper">
+              <div id="loading" class="loading">Loading...</div>
+              <canvas id="language-chart"></canvas>
+            </div>
+            <div id="time" class="chart-wrapper">
+              <div id="loading" class="loading">Loading...</div>
+              <canvas id="time-chart"></canvas>
+            </div>
           </div>
         </div>
         <div class="feed-wrapper">
@@ -48,10 +52,11 @@
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    let ctx, chart;
     const languages = {};
     let data = [];
-    const socket = io.connect('https://agile-castle-96552.herokuapp.com/');
+    let sorted, values, labels;
+    const socket = io.connect('http://localhost:3001');
+    // const socket = io.connect('https://agile-castle-96552.herokuapp.com/');
 
     const date = moment().format('lll');
     document.getElementById('date').innerHTML = date;
@@ -78,8 +83,6 @@
         languages[language] = Number(languages[language]) + 1;
       }
 
-      let sorted, values, labels;
-
       if (languages) {
         sorted = Object.entries(languages).sort((a, b) => b[1] - a[1]);
 
@@ -88,9 +91,11 @@
         labels = sorted.map((item) => item[0]);
         values = sorted.map((item) => item[1]);
       }
+    });
 
-      ctx = document.getElementById('language-chart').getContext('2d');
-      chart = new Chart(ctx, {
+    setInterval(() => {
+      let ctx = document.getElementById('language-chart').getContext('2d');
+      let chart = new Chart(ctx, {
         // The type of chart we want to create
         type: 'pie',
         // The data for our dataset
@@ -136,11 +141,13 @@
           responsiveAnimationDuration: 0, // animation duration after a resize
         },
       });
-    });
-    if (!document.getElementById('time-chart').innerHTML) {
-    }
 
-    setInterval(() => {
+      if (document.querySelector('.loading').style.display !== 'none') {
+        document
+          .querySelectorAll('.loading')
+          .forEach((item) => (item.style.display = 'none'));
+      }
+
       const currentNumbers = document.getElementById('counter').innerHTML;
       if (data.length >= 12) data.shift();
 
@@ -154,12 +161,8 @@
             {
               label: '',
               data: data,
-              backgroundColor: [
-                'rgba(54, 162, 235, 0.2)',
-              ],
-              borderColor: [
-                'rgba(54, 162, 235, 1)',
-              ],
+              backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+              borderColor: ['rgba(54, 162, 235, 1)'],
               borderWidth: 1,
             },
           ],
@@ -171,7 +174,7 @@
             enabled: false,
           },
           events: ['click'],
-          responsive: true,
+          esponsive: true,
           animation: {
             duration: 0, // general animation time
           },
