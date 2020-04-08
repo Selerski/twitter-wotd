@@ -55,8 +55,8 @@
     const languages = {};
     let data = [];
     let sorted, values, labels;
-    const socket = io.connect('http://localhost:3001');
-    // const socket = io.connect('https://agile-castle-96552.herokuapp.com/');
+    // const socket = io.connect('http://localhost:3001');
+    const socket = io.connect('https://agile-castle-96552.herokuapp.com/');
 
     const date = moment().format('lll');
     document.getElementById('date').innerHTML = date;
