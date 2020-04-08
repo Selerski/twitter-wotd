@@ -31,7 +31,8 @@ t.stream('statuses/filter', { track: 'coronavirus' }, (stream) => {
     stream.on('error', (error) => console.log('No data', error));
     socket.on('disconnect', () => {
       socket.removeAllListeners('tweet');
-      socket.disconnect()
+      socket.disconnect();
+
       delete socket;
     });
   });
