@@ -22,18 +22,16 @@ const t = new Twitter({
 });
 
 app.use(cors());
-
+var clients = {};
 t.stream('statuses/filter', { track: 'coronavirus' }, (stream) => {
-  
   io.on('connection', (socket) => {
+    clients[socket.id] = socket;
     stream.on('data', (tweet) => {
       socket.emit('tweet', { tweet: tweet.text, language: tweet.lang });
     });
     stream.on('error', (error) => console.log('No data', error));
     socket.on('disconnect', () => {
-      socket.removeAllListeners('tweet');
-      socket.disconnect();
-      delete socket;
+      delete clients[socket.id];
     });
   });
 });
