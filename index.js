@@ -24,6 +24,7 @@ const t = new Twitter({
 app.use(cors());
 
 t.stream('statuses/filter', { track: 'coronavirus' }, (stream) => {
+  
   io.on('connection', (socket) => {
     stream.on('data', (tweet) => {
       socket.emit('tweet', { tweet: tweet.text, language: tweet.lang });
