@@ -31,7 +31,7 @@ t.stream('statuses/filter', { track: 'coronavirus' }, (stream) => {
     });
     stream.on('error', (error) => console.log('No data', error));
     socket.on('disconnect', () => {
-      
+
       delete clients[socket.id];
     });
   });
